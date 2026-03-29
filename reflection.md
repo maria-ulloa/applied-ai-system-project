@@ -1,6 +1,10 @@
 # PawPal+ Project Reflection
 
 ## 1. System Design
+Identify three core actions a user should be able to perform with PawPal+:
+- A user should be able to add specific tasks (like a morning walk, afternoon playtime, make a grooming appointment). When these tasks are added, there should be some sort of priority level given to each task and should assign each task a category so the user finds it easier to keep track of the tasks they have for their pet. 
+- A user should be able to input their daily availability and get a schedule that aligns with these times as well as the tasks are able to be done within the time window. 
+- A user should be able to see the schedule for that day at any time they want and they can see the reasoning behind the choices for the tasks. The list should be realistic and allow the user to easily cross off the tasks when they have done it.
 
 **a. Initial design**
 
