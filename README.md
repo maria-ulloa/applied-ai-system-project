@@ -53,3 +53,26 @@ The basic schedule generator had a few errors that would cause conflict with the
 - To ensure that the Manager logic and functionality works as it is supposed to, AI and I wrote three tests that cover three different areas of edge cases which allows the user to use the pet care app more efficiently. To make sure the tasks were being returned in chronological order, I tested the `sort_by_time` method by giving it three tasks completely out of order (evening, then morning, then afternoon). The Manager correctly converts the "HH:MM" strings to total minutes and calculates them correctly to return them in a correct and reasonable list (earliest to latest). To make sure there is a new task created the following day after a daily task is completed, I tested the `Manager.complete_task` method using timedelta. When a daily or weekly task is completed, the Manager should know to archive that task and generate a new one so it can be used consistently without manual reenter. The test confirms the original task is done and a new one is now waiting in the pet's list. To ensure the Manager can detect and flag duplicate set times for a task, I tested the `detect_conflicts` method. There are two different pets created (Buddy and Whiskers) and both have a task assigned to them at 09:00. The test makes sure the method detects this overlap in tasks and issues a warnig to the user with the names of both the pets and the time slot so the user knows the pets can't be in two places at once.
 
 - I would definitely give this 4/5 stars on confidence level in the system's reliability. I tested some of the core logic in Manager and throughout the classes and fortunately all the tests passed. However, I know that there is always room for improvement meaning there may be more complex edge cases that I am not considering right now. The system will not be perfect, but with the scenarios and cases I did check, I know that it will at least work in those environments.
+
+### Features
+
+- Priority-based Scheduling — The `Manager.generate_plan()` method not only lists tasks, but it also sorts all pending tasks by priority level (from highest priority to lowest). It fills the owner's daily availability time window, making sure the most important pet needs are met first even if some smaller tasks are quicker or don't fit.
+
+- Smart Time Sorting — The `Manager.sort_by_time()` method gives users the option to sorts pending tasks either by clock time (`HH:MM`) or by duration (shortest first). In this method, there is a helper that converts `HH:MM` strings to total minutes so the sorting is always accurate numerically. 
+
+- Conflict detection — To prevent overbooking and overlap, the  method `Manager.detect_conflicts()` groups tasks by their scheduled `time_str` using a `defaultdict`. It flags any time slot where mmultiple tasks overlap, and higlights exactly which pets and tasks are affected so the user can fix their schedule.
+
+- Filter by pet and completion status — The method `Manager.filter_tasks()` lets the user narrow down the task list by a specific pet, completion status, or both. This is useful to the user especially if they have several pets and are concerns about the tasks for one pet, so they avoid the hassle of looking through the other pets in the list.
+
+- Automatic task recurrence — The method `Task.complete_task()` marks a task done and uses `timedelta` to generate the next occurence of the task based on its frequencey (Daily or Weekly). The `Manager.complete_task()` method appends that new task to the pet's list automatically, so the user  doesn't have to put in the task over and over again. 
+
+- Schedule reasoning — The `Manager.get_reasoning()` method produces a human-readable breakdown that explains in detail the schedule the user is given. It highlights the duration and priority of each task and shows exactly how much of the user's daily available time was used. 
+
+- Instant task completion with rerun — In the Streamlit UI, I used expanders and checkboxes for each pet. Checking a box triggers the completion logic and calls st.rerun() so the schedule refreshes instantly.
+
+- Tasks-that-didn't-fit reporting — If the user's schedule is too packed, the UI identifies the tasks that were left out. It lists them clearly and suggests increasing daily availability so the pet doesn't miss out on care.
+
+### Demo
+<a href="images/pawpal_web.png" target="_blank">
+  <img src="images/pawpal_web.png" width = "500" alt="PawPal App Interface">
+</a>
