@@ -38,7 +38,9 @@ One major change I made with the help of AI is the attribute for User's daily_av
 **b. Tradeoffs**
 
 - Describe one tradeoff your scheduler makes.
+The Manager (Manager is just my name for scheduler, I labeled it this to own some authenticity to my project :D) trades efficiency for priority. The Manager always looks at the level of importance of tasks and how long those tasks take to see if it fits within the time given. If a task has a high priority level associated with it, then the Manager will immediately incorporate that instead of recommending the user to complete a lot of smaller tasks with less priority. In other words, quality over quanity matters to the Manager. This can be seen in the generate_plan() method where a high priority level task will be fit into the schedule first rather than lower priority leve task even if it is something that the user would want to do becaue it really depends on the user's time availability.
 - Why is that tradeoff reasonable for this scenario?
+This tradeoff is reasonable because urgency is important and tasks are not equal. In pet care, it is important to do tasks that benefit the health of your pet and while giving mediciation to regulate your cat's breathing and playing with your cat both benefit its health, failing to do one is much more of a consequence than the other. It is important that those tasks that would bring pain and hurt in the future are done as quickly as possibly to avoid anything unfortunate, even if it means the user doesn't cross out more tasks and may feel unproductive. The Manager ensures that the pet's health and safety needs are met first, which is the purpose of a caretaker.
 
 ---
 
