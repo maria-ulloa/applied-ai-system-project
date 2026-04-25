@@ -1,5 +1,7 @@
 import streamlit as st
 from pawpal_system import User, Pet, Task, Manager
+# Updated to import the new functions we added to ai_engine.py
+from ai_engine import evaluate_checkin, answer_health_question
 
 st.set_page_config(page_title="PawPal+", page_icon="🐾", layout="centered")
 st.title("🐾 PawPal+")
@@ -190,3 +192,44 @@ if st.button("Generate Schedule"):
                 st.caption("Increase your daily availability to include these tasks.")
     else:
         st.warning("No tasks could be scheduled. Add tasks or increase your daily availability.")
+
+st.divider()
+
+# Set up the look of the daily check in section 
+st.subheader("🐾 How did today go? Check in below!")
+st.caption("Tell us about your day with your pet and we will let you know how you did!")
+
+check_in_pet = st.selectbox("Which pet are you checking in about?", [p.name for p in st.session_state.owner.pets], key="checkin_pet")
+
+# Searches for the specific pet the owner selected to check in about and grabs all the information associated with the pet (including the tasks)
+selected_pet = next(p for p in st.session_state.owner.pets if p.name == check_in_pet)
+
+# Looks through the tasks for that pet and creates a list of the tasks that were due today that have not been completed yet
+pending_tasks = [t.task_name for t in selected_pet.tasks if not t.is_completed]
+
+# Guardrail: If there are no pending tasks for that pet, we should stop and tell the owner to add some tasks first 
+if not pending_tasks:
+    st.info("You don't have any pending tasks for this pet yet. Add tasks above first!")
+
+else:
+    # If did not stop, it means there are pending tasks, so we show the owner the list of pending tasks for that pet as context for the check-in
+    st.write(f"Tasks scheduled for {check_in_pet} today:")
+    for task in pending_tasks:
+            st.markdown(f"- {task}")
+
+    # Text box for the owner to describe their day
+    tasks_done = st.text_area(
+        "What did you do for your pet today?",
+        placeholder = "e.g. I gave Luna breakfast and dinner, we played for 30 minutes, but I forgot to clean the litter box..."
+    )
+
+    # When the owner clicks the button to submit their check-in, we call the evaluate_checkin function
+    if st.button("Evaluate my day 🐾"):
+        result = evaluate_checkin(
+            pet_name=check_in_pet,
+            species=selected_pet.species,
+            tasks_due=pending_tasks,
+            tasks_done=tasks_done
+        )
+        st.success("Here's how your day went! 🐾")
+        st.markdown(result)
