@@ -199,6 +199,7 @@ st.divider()
 st.subheader("🐾 How did today go? Check in below!")
 st.caption("Tell us about your day with your pet and we will let you know how you did!")
 
+# Owner chooses which pet they want to check in about from a dropdown of their pets 
 check_in_pet = st.selectbox("Which pet are you checking in about?", [p.name for p in st.session_state.owner.pets], key="checkin_pet")
 
 # Searches for the specific pet the owner selected to check in about and grabs all the information associated with the pet (including the tasks)
@@ -233,3 +234,104 @@ else:
         )
         st.success("Here's how your day went! 🐾")
         st.markdown(result)
+
+st.divider()
+
+# Set up the look of the health question section
+st.subheader("🩺 Have a pet health question? Ask PawPal+")
+st.caption("Have a question about your pet's health, behavior, or care? Ask us anything and we will do our best to help!")
+
+# Owner chooses which pet they want to ask a question about from a dropdown of their pets 
+question_pet = st.selectbox("Which pet is your question about?", [p.name for p in st.session_state.owner.pets], key = "question_pet")
+# Selects the pet object that the owner chose to ask a question about so we can use the information about that pet 
+question_pet_obj = next(p for p in st.session_state.owner.pets if p.name == question_pet)
+
+# Text box for the owner to type in their health question
+user_question = st.text_input(
+    "What would you like to know?",
+    placeholder = "e.g. How often should I clean my cat's litter box? Or my dog has been scratching a lot lately!"
+)
+
+# When the owner clicks the button to submit their question, we call the answer_health_question function
+if st.button("Ask PawPal+ 🐾"):
+    # Guardrail: If the owner tries to submit an empty question, we stop and ask them to type a question first before sending to Groq 
+    if not user_question.strip():
+        st.warning("Please type a question first!")
+    # If there is a question, we call the function to get an answer from Groq and display it to the owner
+    else:
+        answer = answer_health_question(user_question, question_pet_obj.species)
+        st.success("Here's what PawPal+ found! 🐾")
+        st.markdown(answer)
+
+        # Store the answer and the pet it was about in session state so we can use it for the add task button
+        st.session_state.last_question_answer = answer
+        st.session_state.last_question_pet = question_pet_obj
+        
+        # If the answer from Groq includes a suggested task and the owner hasn't added one yet, we show a button to add that task to the pet's schedule
+        if "📋 Suggested task:" in answer and not st.session_state.get("task_added"):
+            st.session_state.show_add_button = True
+
+# Show the add task button to the owner and asking if they would like the suggested task to be added to their pet's schedule
+# We want this to be able to live after reruns so it is outside the Ask PawPal block
+if st.session_state.get("show_add_button"):
+    suggested = st.session_state.last_question_answer.split("📋 Suggested task:")[-1].strip()
+    st.info(f"📋 Suggested task: {suggested} — would you like to add this to your pet's schedule?")
+
+    # If the owner clicks the button to add the suggested task, we show a form to input the details of the task and then add it to the pet's tasks
+    if st.button("Add this to my schedule 🐾", key = "show_form"):
+        st.session_state.show_task_form = True
+
+# Show the form to the owner so they can input task details only if they clicked the button to add the suggested task
+if st.session_state.get("show_task_form"):
+    suggested = st.session_state.last_question_answer.split("📋 Suggested task:")[-1].strip()
+    st.markdown("**Customize this task for your schedule 🐾**")
+
+    # Show existing tasks to the owner so they can check for duplicate tasks before adding
+    pet = st.session_state.last_question_pet
+    existing_tasks = [t.task_name for t in pet.tasks if not t.is_completed]
+    # Guardrail: If there are already tasks in the schedule for that pet, we show them to the owner in an expander so they can check
+    # if the suggested task is already included before filling out the form to add it again
+    if existing_tasks:
+        with st.expander(f"See {pet.name}'s current tasks before adding"):
+            for t in pet.tasks:
+                if not t.is_completed:
+                    st.markdown(f"- {t.task_name} (Duration: {int(t.duration * 60)} min, Priority: {PRIORITY_LABEL.get(t.priority_level, t.priority_level)})")
+
+    # Set up the form inputs for the task details (duration, category, priority, frequency, time)
+    col1, col2 = st.columns(2)
+    with col1:
+        task_duration = st.number_input("Duration (mins)", min_value=5, max_value=240, value=30, key = "answer_duration")
+    with col2:
+        task_category = st.text_input("Category", value="Health", key = "answer_category")
+    
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        task_priority = st.selectbox("Priority", ["Low", "Medium", "High"], index=1, key = "answer_priority")
+    with col2:
+        task_frequency = st.selectbox("Frequency", ["Daily", "Twice Daily", "Weekly"], key = "answer_frequency")
+    with col3:
+        task_time = st.text_input("Scheduled time (HH:MM)", value="00:00", key = "answer_time")
+
+    # When the owner clicks the button to confirm adding the task, we create a new Task object with the details and add it to the pet's tasks
+    if st.button("Confirm add to schedule 🐾", key = "confirm_add"):
+        pet = st.session_state.last_question_pet
+        existing = [t.task_name.lower() for t in pet.tasks]
+        # Check for EXACT duplicates before adding
+        if suggested.lower() in existing:
+            st.warning("You already have this task in your schedule!")
+        else:
+            new_task = Task(
+                task_name=suggested,
+                category=task_category,
+                priority_level=PRIORITY_MAP[task_priority],
+                duration=round(task_duration / 60, 2),
+                frequency=task_frequency,
+                time_str=task_time,
+            )
+            pet.tasks.append(new_task)
+            # Clear all flags and rerun so the forms and buttons diasppear and the new task shows up in the schedule
+            st.session_state.show_task_form = False
+            st.session_state.show_add_button = False
+            st.session_state.task_added = True
+            st.success(f" Added '{suggested}' to {pet.name}\'s schedule. Generate your schedule to see it included!") 
+            st.rerun()

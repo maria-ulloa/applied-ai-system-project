@@ -39,26 +39,38 @@ KNOWLEDGE_BASE = {
 }
 
 # Step 1: RAG Retrieval Function
-def retrieve_relevant_info(question: str) -> str:
+def retrieve_relevant_info(species: str) -> str:
     """
     Retrieves most relevant knowledge base chunk based on the user's question.
     """
-    cat_keywords = ["cat","kitty","feline","litter","meow","purr","kitten","whiskers","feed","eat","groom","sleep"]
-    dog_keywords = ["dog","puppy","canine","bark","woof","pup","hound","walk","treat","groom","sleep","fetch"]
+    # cat_keywords = ["cat","kitty","feline","litter","meow","purr","kitten","whiskers","feed","eat","groom","sleep"]
+    # dog_keywords = ["dog","puppy","canine","bark","woof","pup","hound","walk","treat","groom","sleep","fetch"]
 
     # Looks through each word in question.lower() and checks if any of the keywords related to cats or dogs match, returns the chunk with the best match.
-    if any(word in question.lower() for word in cat_keywords):
+    # if any(word in question.lower() for word in cat_keywords):
+    #     return KNOWLEDGE_BASE["cat_care"]
+    # elif any(word in question.lower() for word in dog_keywords):
+    #     return KNOWLEDGE_BASE["dog_care"]
+    # else:
+    #     return KNOWLEDGE_BASE["general_care"]
+
+    species_lower = species.lower()
+
+    # Looks at the species of the pet the owner selected and returns the corresponding chunk of information
+    # If the species is not recognized, it returns the general care chunk.
+    if species_lower == "cat":
         return KNOWLEDGE_BASE["cat_care"]
-    elif any(word in question.lower() for word in dog_keywords):
-        return KNOWLEDGE_BASE["dog_care"]
+    elif species_lower == "dog":
+        return KNOWLEDGE_BASE["dog_care"] 
     else:
         return KNOWLEDGE_BASE["general_care"]
 
+
 # Step 2: Using RAG retrieval to generate an answer with Groq
-def answer_health_question(question: str) -> str:
+def answer_health_question(question: str, species: str) -> str:
 
     # Retrieve the relevant chunk first before generating the answer to ensure the model has the necessary context to provide a helpful response.
-    context = retrieve_relevant_info(question)
+    context = retrieve_relevant_info(species)
 
     prompt = f"""
         You are PawPal+, a warm and caring pet health assistant.
@@ -72,7 +84,12 @@ def answer_health_question(question: str) -> str:
 
         QUESTION: {question}
 
+        If the question suggests something that should be added to a pet care schedule, end your response with exactly:
+        📋 Suggested task: [specific task name] 
+        Otherwise, do not include this line at all.
+
         Answer in 2-4 sentences. Be warm, clear, and always recommend a vet for serious concerns.
+        
     """
     try:
         response = client.chat.completions.create(
