@@ -111,6 +111,19 @@ As for limitations, the knowledge base currently only covers cats, dogs, and gen
 
 For a deeper reflection on ethics, limitations, and AI collaboration, see `reflection.md`.
 
+## Portfolio
+
+**GitHub:** https://github.com/maria-ulloa/applied-ai-system-project
+
+**What this project says about me as an AI engineer:**
+
+This project says that I care about keeping humans in the loop. In a world where there is a lot of paranoia and hostility around how powerful AI is becoming, I hope the role of an AI engineer is to build systems where AI and humans work together rather than AI working alone. PawPal+ reflects that because the AI suggests tasks but never does anything with that until the owner actually decides if they want to add it. Immediately after adding a suggested task, the owner gets to fill out all the details of the task out because they know their pet better than anyone, especially a machine. The system is only as meaningful as the person using it and meaningful is what we want the owner to feel at the end of using it. This project also started from a personal place, which says a lot about how I feel like AI engineering should reflect our personal values and beliefs. Although, it is also important as an AI engineer to recognize biases and be transparent with the users always. The best systems are built when the engineer actually cares about the problem they are solving, not just the technology or money behind it. This project taught me a lot about myself as someone who works with AI. I used to lean on it too heavily and accept whatever it gave me, but now I know how to go back and forth with it, correct it when it is wrong, and fight back on its logical thinking when something doesn't feel right. I am not afraid to question AI anymore, and I actually think that is the type of engineer I want to be. I strive to be someone who uses AI as a tool without losing my own voice or instincts in the process.  
+
+## Video Walkthrough
+
+Loom video link: https://www.loom.com/share/d4e724d0d5ae44b0a2cb04ed57a0e67f 
+
+---
 
 # PawPal+ (Module 2 Project)
 

@@ -24,6 +24,9 @@ One instance where AI was flawed was when it suggested placing buttons inside ot
 
 For a summary of AI collaboration and tsting, see `README.md`.
 
+## A Personal Note
+It had been asked why this project mattered and while it does matter from an academic standpoint, it also means a lot to me personally. A little over a month ago, I had to say goodbye to my best friend, my cat. She was kind, shy, but had so much love to give to anyone who she saw. It has not been easy and the months leading up to her departure were certainly the most difficult. When we had took her to the vet after postponing for more than a year, we definitely got the worst news we could have gotten, which was her terminal illness. Even though the doctors reassured us that we couldn't have really known and that it was bound to happen because of her past, the feeling that I failed as a pet owner haunts me even now. I don't wish this pain on anyone, the guilt is too much. Our pets should be remembered with love and honor and I should not be left wondering why I didn't do more because I also know my cat wouldn't want that. This is when I had the idea to make PawPal+ more personal and be that reassurance some pet owners may need especially when life gets difficult and overwhelming. If you are a pet owner reading this, please know that the love you have for your pet is enough. PawPal+ is just here to help that love show up and stand out in the right ways.
+
 ---
 
 # Original PawPal+ Project Reflection (Module 2)
