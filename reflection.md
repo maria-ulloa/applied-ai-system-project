@@ -1,4 +1,32 @@
-# PawPal+ Project Reflection
+# Applied AI System - Reflection 
+
+## Ethics and AI Collaboration
+
+**What are the limitations or biases in your system?**
+
+The biggest limitation in my system is that the knowledge base is hardcoded, meaning it only covers cats, dogs, and general care. This itself is a bias because the system assumes most pet owners have a cat or a dog, when in reality there are many other pets that deserve the same level of care and attention. The knowledge base is also not very expansive, so if an owner asks a question about something that is outside of what is covered, Groq will either refuse to answer or occasionally answer anyway which is inconsistent. Another limitation is that Groq only suggests one task per question, when in reality a health concern could lead to multiple tasks having to be added to monitor the well-being of a pet. The system is designed to be warm and reassuring as its key point in human interaction with the app, but it could be seen as a bias because it may encourage an owner to feel good even when their pet care was genuinely lacking that day.  
+
+**Could your AI be misused, and how would you prevent that?**
+
+If I am being honest, I do realize how sensitive of an area this is for AI to be meddled with because the system provides information on pet health. This means an owner could take what Groq says as the absolute truth, the end all be all and may not ever seek professional help when they may have situations where they definitely should. This still poses a risk even with the guardrail added of Groq explicitly telling the owner to contact their vet for further information or concerns. The knowledge base is limited and Groq is not a veterinarian, so there is even more of a real risk of an owner making decisions based on incomplete or incorrect information provided by Groq. To help prevent this, as mentioned, every health response includes a reminder to consult a vet for serious concerns, which is built directly into prompt instructions. The additional guardrails also help by catching vague or empty inputs before they reach Groq. However, I am aware that there are edge cases I have not thought of yet, and the most important thing an owner should know is that this system is meant to be a guide and a reassuring presence. This system is not a replacement for a real veterinarian or professional advice. 
+
+**What surprised you while testing your AI's reliability?**
+
+Honestly, seeing the answers Groq would come up with was interesting every single time. I have not worked with RAG too much outside of this course, so it still surprises me how LLMs are able to take a retrieved chunk of information and turn it into a warm and conversational response that sounds as close to a human as it can manage. Groq also surprised me when it was able to read a written sentences from the owner, one that it couldn't have predicted, and understand which tasks to suggest based on that language, as well as which tasks were done or not done that day without any explicitly formatting required from the owner. What also surprised me was how precise you have to be with prompt instructions for the AI to do exactly what you want it to do. A small change in wording can completely change how Groq interprets the instructions, which I noticed when testing the suggested task line. Sometimes Groq would follow it perfectly and other times it would add extra lines or interpret it differently. The testing taught me that working with LLMs requires a lot of patience and iteration with prompts. 
+
+**Describe your collaboration with AI during this project. Identify one instance when the AI gave a helpful suggestion and one instance where its suggestion was flawed or incorrect.**
+
+Working with AI on this project was helpful but also taught me a lot about trusting my own instincts. There were moments where AI suggestions didn't make sense or didn't feel like something I would write, and those moments made me realize how important it is to stay in control even when it is tempting to blindly accept the help of a powerful tool. Additionally, collaboration with AI helped me see clearly how often AI hallucinates and makes up information or logic that I had not provided it at all, even trying to convince me what I said wasn't true. It is easy to grow dependent on AI's help because it doesn't require much thought at first, but when the suggestions start to break the code or produce something unnatural, it makes one forced to stop and actually think about the logic themselves. Due to this, AI made me a more critical thinker because I had to constantly evaluate whether what it gave me actually made sense for my specific project.
+
+One instance where AI was helpful was when I had a bug I couldn't catch myself at first. I had passed a list of task names into a function but then trying to loop through them as if they were Task objects. AI caught this bug while I had asked to explain something else further down, it brought me back up in the code to draw this issue to my attention. It even explains why the one line was breaking the logic surrounding it. It definitely was an avoidable mistake and I am not sure how I didn't see it first, but it was useful to have AI scanning the code for me even when I didn't ask it to in that moment so I didn't run into problems later.
+
+One instance where AI was flawed was when it suggested placing buttons inside other button blocks in Streamlit. On the surface it made sense and seemed logical, but when testing it the inner button would completely disappear after clicking because Streamlit reruns the entire page on every interaction with the graphics. I turned to AI to see if it could explain what the problem was and it suggested the structure caused the bug and offered to fix it for me. I had to make sure the suggestions were tested and not just trusted with nothing to back it up. 
+
+For a summary of AI collaboration and tsting, see `README.md`.
+
+---
+
+# Original PawPal+ Project Reflection (Module 2)
 
 ## 1. System Design
 Identify three core actions a user should be able to perform with PawPal+:
